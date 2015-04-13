@@ -1,0 +1,27 @@
+name: "CaffeNet"
+layer {
+  name: "data"
+  type: "ImageData"
+  top: "data"
+  top: "label"
+  data_param {
+    source: "train.txt"
+    batch_size: 16
+  }
+}
+layer {
+  name: "ip"
+  type: "INNER_PRODUCT"
+  bottom: "data"
+  top: "ip"
+  inner_product_param {
+    num_output: 2
+  }
+}
+layer {
+  name: "loss"
+  type: "SOFTMAX_LOSS"
+  bottom: "ip"
+  bottom: "label"
+  top: "loss"
+}
