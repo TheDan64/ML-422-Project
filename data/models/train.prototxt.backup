@@ -8,6 +8,7 @@ layer {
     phase: TRAIN
   }
   transform_param {
+    mean_file: "models/train_mean.binaryproto"
     scale: 0.00390625
   }
   data_param {
@@ -25,6 +26,7 @@ layer {
     phase: TEST
   }
   transform_param {
+    mean_file: "models/test_mean.binaryproto"
     scale: 0.00390625
   }
   data_param {
@@ -140,7 +142,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 10
+    num_output: 5
     weight_filler {
       type: "xavier"
     }

@@ -11,9 +11,8 @@ import argparse
 
 # Globals and Paths
 MODEL = "models/deploy.prototxt"
-PRETRAINED = "snapshots/snapshot_iter_1000.caffemodel"
-IMG_TRAIN_PATH = "train"
-IMG_TEST_PATH = "test"
+PRETRAINED = "snapshots/snapshot_iter_200.caffemodel"
+IMG_DIR = "sample/"
 
 caffe.set_mode_cpu()
 
@@ -49,13 +48,15 @@ with open("submission.csv", "w") as csvfile:
 
 	writer.writerow(["image", "level"])
 
-	count = 0
+	count = 1
 
-	for img in os.listdir("test/"):
+	for img in os.listdir(IMG_DIR):
 		start = time.time()
 		if img[-5:] == ".jpeg":
-			writer.writerow([img[-5:], net.predict([caffe.io.load_image("test/" + img)])])
-			print count, time.time() - start
+			predictions = net.predict([caffe.io.load_image(IMG_DIR + img)])
+			writer.writerow([img[:-5], predictions.argmax()])
+			sys.stdout.write("Iter {} took {:.2f}s and predicted {}    \r".format(count, time.time() - start, predictions))
+			sys.stdout.flush()
 			count += 1
 
 	# for (name, pred) in get_predictions("test/"):
@@ -69,4 +70,4 @@ with open("submission.csv", "w") as csvfile:
 
 	# 	count += 1
 
-print("Made it to the end!")
+print("\nMade it to the end!")

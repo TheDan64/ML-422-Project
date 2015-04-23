@@ -13,7 +13,7 @@ layer {
   }
   data_param {
     source: "resized_train_lmdb"
-    batch_size: 4
+    batch_size: 8
     backend: LMDB
   }
 }
@@ -31,7 +31,7 @@ layer {
   }
   data_param {
     source: "resized_test_lmdb"
-    batch_size: 4
+    batch_size: 8
     backend: LMDB
   }
 }
@@ -47,7 +47,7 @@ layer {
     lr_mult: 2
   }
   convolution_param {
-    num_output: 20
+    num_output: 200
     kernel_size: 5
     stride: 1
     weight_filler {
@@ -81,7 +81,7 @@ layer {
     lr_mult: 2
   }
   convolution_param {
-    num_output: 50
+    num_output: 200
     kernel_size: 5
     stride: 1
     weight_filler {
@@ -115,7 +115,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 500
+    num_output: 200
     weight_filler {
       type: "xavier"
     }
