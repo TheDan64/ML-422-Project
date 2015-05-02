@@ -1,6 +1,6 @@
 name: "DiabeticRetinopathy"
 input: "data"
-input_dim: 8
+input_dim: 2
 input_dim: 3
 input_dim: 256
 input_dim: 256
@@ -16,7 +16,7 @@ layer {
     lr_mult: 2
   }
   convolution_param {
-    num_output: 200
+    num_output: 150
     kernel_size: 5
     stride: 1
     weight_filler {
@@ -50,7 +50,7 @@ layer {
     lr_mult: 2
   }
   convolution_param {
-    num_output: 200
+    num_output: 150
     kernel_size: 5
     stride: 1
     weight_filler {
@@ -84,7 +84,7 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 200
+    num_output: 150
     weight_filler {
       type: "xavier"
     }

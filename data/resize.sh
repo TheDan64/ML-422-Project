@@ -10,6 +10,7 @@ for name in $1*.jpeg; do
     percent=$(echo "scale = 3; $count*100/$images" | bc)
     echo -ne "$percent% complete.\r"
     convert -resize 256x256\! $name $name
+    ./contour $name
     let "count++"
 done
 

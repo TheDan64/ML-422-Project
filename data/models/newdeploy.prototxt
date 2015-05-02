@@ -1,40 +1,9 @@
 name: "DiabeticRetinopathy"
-layer {
-  name: "input"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    mean_file: "models/train_mean.binaryproto"
-#    scale: 0.00390625
-  }
-  data_param {
-    source: "resized_shuffled_train_subset_lmdb"
-    batch_size: 2
-    backend: LMDB
-  }
-}
-layer {
-  name: "input"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    mean_file: "models/val_mean.binaryproto"
-#    scale: 0.00390625
-  }
-  data_param {
-    source: "resized_shuffled_val_lmdb"
-    batch_size: 2
-    backend: LMDB
-  }
-}
+input: "data"
+input_dim: 2
+input_dim: 1
+input_dim: 256
+input_dim: 256
 layer {
   name: "conv1"
   type: "Convolution"
@@ -45,13 +14,15 @@ layer {
   }
   param {
     lr_mult: 2
+# 2
   }
   convolution_param {
-    num_output: 150
-    kernel_size: 5
+    num_output: 200
+    kernel_size: 7
     stride: 1
     weight_filler {
       type: "xavier"
+      value: 1
     }
     bias_filler {
       type: "constant"
@@ -81,11 +52,12 @@ layer {
     lr_mult: 2
   }
   convolution_param {
-    num_output: 150
-    kernel_size: 5
+    num_output: 50
+    kernel_size: 7
     stride: 1
     weight_filler {
       type: "xavier"
+      value: 1
     }
     bias_filler {
       type: "constant"
@@ -115,9 +87,10 @@ layer {
     lr_mult: 2
   }
   inner_product_param {
-    num_output: 150
+    num_output: 20
     weight_filler {
       type: "xavier"
+      value: 1
     }
     bias_filler {
       type: "constant"
@@ -129,6 +102,15 @@ layer {
   type: "ReLU"
   bottom: "ip1"
   top: "ip1"
+}
+layer {
+  name: "drop3"
+  type: "Dropout"
+  bottom: "ip1"
+  top: "ip1"
+  dropout_param {
+    dropout_ratio: 0.7
+  }
 }
 layer {
   name: "ip2"
@@ -145,6 +127,7 @@ layer {
     num_output: 5
     weight_filler {
       type: "xavier"
+      value: 1
     }
     bias_filler {
       type: "constant"
@@ -152,19 +135,8 @@ layer {
   }
 }
 layer {
-  name: "accuracy"
-  type: "Accuracy"
+  name: "prob"
+  type: "Softmax"
   bottom: "ip2"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "ip2"
-  bottom: "label"
-  top: "loss"
+  top: "prob"
 }
